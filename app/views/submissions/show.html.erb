@@ -1,14 +1,21 @@
-<p id="notice"><%= notice %></p>
+<div class="page-header">
+  <h4>
+    <%= link_to like_submission_path(@submission), method: :put do %>
+      <i class="fa fa-caret-up fa-lg " aria-hidden="true"></i>
+    <% end %>
+    <%= @submission.title %>
+    <a href="<%= @submission.url %>"><%= @submission.url %></a>
+  </h4>
+  <p><%= @submission.get_upvotes.size %> points by <%= @submission.user.email %> <%= time_ago_in_words(@submission.created_at) %> ago | <%= link_to "#{@submission.comments.count} comments", @submission %> </p>
+  <br>
 
-<p>
-  <strong>Title:</strong>
-  <%= @submission.title %>
-</p>
+  <%= simple_form_for [@submission, Comment.new] do |f| %>
+    <%= f.text_area :body, class: "form-control" %>
+    <br>
+    <%= f.submit "add comment" %>
+  <% end %>
 
-<p>
-  <strong>Url:</strong>
-  <%= @submission.url %>
-</p>
-
-<%= link_to 'Edit', edit_submission_path(@submission) %> |
-<%= link_to 'Back', submissions_path %>
+  <div id="comments">
+    <%= render :partial => @submission.comments %>
+  </div>
+</div>
